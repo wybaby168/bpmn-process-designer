@@ -1,15 +1,15 @@
 {
   "name": "bpmn-process-designer",
   "version": "0.0.1",
-  "description": "A process designer base on Vue 2.x and ElementUI",
+  "description": "基于Vue2.x和ElementUI的流程设计器",
   "keywords": [
     "bpmn",
     "bpmn.js",
     "vue"
   ],
   "author": {
-    "name": "MiyueFE",
-    "email": "913784771@qq.com"
+    "name": "Wangyu",
+    "email": "wybaby168@gmail.com"
   },
   "repository": {
     "type": "git",
@@ -20,40 +20,40 @@
     "build": "vue-cli-service build --report"
   },
   "dependencies": {
-    "bpmn-js-sketchy": "^0.5.3",
+    "bpmn-js-sketchy": "^0.6.0",
     "bpmn-js-task-resize": "^1.2.0",
     "bpmn-js-token-simulation": "^0.10.0",
     "core-js": "^3.8.1",
     "diagram-js-minimap": "^2.0.4",
     "highlight.js": "^10.5.0",
     "min-dash": "^3.5.2",
-    "vue": "^2.6.11",
-    "vue-router": "^3.4.9",
-    "x2js": "^3.4.2",
+    "vue": "^2.7.14",
+    "vue-router": "^3.6.5",
+    "x2js": "^3.4.4",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.1",
+    "@vue/cli-plugin-babel": "^4.5.19",
+    "@vue/cli-plugin-eslint": "^4.5.19",
+    "@vue/cli-service": "^4.5.19",
+    "@vue/compiler-sfc": "^2.7.14",
+    "vue-template-compiler": "^2.7.14",
     "@vue/eslint-config-prettier": "^5.0.0",
-    "axios": "^0.21.1",
+    "axios": "^1.3.2",
     "babel-eslint": "^10.1.0",
     "bpmn-js": "^8.8.3",
-    "bpmn-js-properties-panel": "^0.37.2",
+    "bpmn-js-properties-panel": "^1.17.0",
     "camunda-bpmn-moddle": "^4.4.1",
     "compression-webpack-plugin": "^6.1.1",
-    "element-ui": "^2.13.2",
+    "element-ui": "^2.15.12",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^6.2.2",
-    "fs-extra": "^8.1.0",
+    "fs-extra": "^11.1.0",
     "sass": "^1.30.0",
     "sass-loader": "^8.0.2",
     "script-ext-html-webpack-plugin": "^2.1.5",
     "terser-webpack-plugin": "^4.2.3",
-    "vue-template-compiler": "^2.6.11",
     "webpack-bundle-analyzer": "^3.9.0"
   },
   "eslintConfig": {
