@@ -23,6 +23,7 @@ export default {
   "Connect using Sequence/MessageFlow or Association": "使用顺序/消息流或者关联连接",
   "Connect using DataInputAssociation": "使用数据输入关联连接",
   Remove: "移除",
+  "Create element": "创建元素",
   "Activate the hand tool": "激活抓手工具",
   "Activate the lasso tool": "激活套索工具",
   "Activate the create/remove space tool": "激活创建/删除空间工具",
@@ -113,7 +114,16 @@ export default {
   "Event Sub Process": "事件子流程",
   "Collapsed Pool": "折叠池",
   "Expanded Pool": "展开池",
-
+  Gateways: "网关节点",
+  Tasks: "任务节点",
+  "Sub Processes": "子流程节点",
+  Events: "事件节点",
+  Participants: "参与者节点",
+  Data: "数据节点",
+  "Data Store Reference": "数据存储引用",
+  "Data Object Reference": "数据对象引用",
+  "Empty Pool": "空白池",
+  "Boundary Event": "边界事件",
   // Errors
   "no parent for {element} in {parent}": "在{parent}里，{element}没有父类",
   "no shape type specified": "没有指定的形状类型",
@@ -234,5 +244,7 @@ export default {
   "Specify more than one user as a comma separated list.": "指定多个用户作为逗号分隔的列表。",
   "Tasklist Configuration": "Tasklist配置",
   Startable: "启动",
-  "Specify more than one group as a comma separated list.": "指定多个组作为逗号分隔的列表。"
+  "Specify more than one group as a comma separated list.": "指定多个组作为逗号分隔的列表。",
+  "Open minimap": "展开小地图",
+  "Close minimap": "关闭小地图"
 };

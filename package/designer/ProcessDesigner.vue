@@ -92,7 +92,7 @@ import DefaultEmptyXML from "./plugins/defaultEmpty";
 import customTranslate from "./plugins/translate/customTranslate";
 import translationsCN from "./plugins/translate/zh";
 // 模拟流转流程
-import tokenSimulation from "bpmn-js-token-simulation";
+import tokenSimulation from "./plugins/simulation";
 // 标签解析构建器
 // import bpmnPropertiesProvider from "bpmn-js-properties-panel/lib/provider/bpmn";
 // 标签解析 Moddle

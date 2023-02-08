@@ -3,14 +3,14 @@ import { assign } from "min-dash";
 
 export default function CustomPalette(palette, create, elementFactory, spaceTool, lassoTool, handTool, globalConnect, moddle, translate) {
   PaletteProvider.call(this, palette, create, elementFactory, spaceTool, lassoTool, handTool, globalConnect, moddle, translate, 2000);
-  this._create = create
-  this._elementFactory = elementFactory
-  this._spaceTool = spaceTool
-  this._lassoTool = lassoTool
-  this._handTool = handTool
-  this._globalConnect = globalConnect
-  this._moddle = moddle
-  this._translate = translate
+  this._create = create;
+  this._elementFactory = elementFactory;
+  this._spaceTool = spaceTool;
+  this._lassoTool = lassoTool;
+  this._handTool = handTool;
+  this._globalConnect = globalConnect;
+  this._moddle = moddle;
+  this._translate = translate;
 }
 
 const F = function() {}; // 核心，利用空对象作为中介；
@@ -31,7 +31,7 @@ F.prototype.getPaletteEntries = function() {
   function createAction(type, group, className, title, options) {
     function createListener(event) {
       var shape = elementFactory.createShape(assign({ type: type }, options));
-      console.log(shape)
+      console.log(shape);
 
       if (options) {
         shape.businessObject.di.isExpanded = options.isExpanded;
