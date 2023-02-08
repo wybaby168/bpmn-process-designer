@@ -4,8 +4,6 @@
     <my-process-designer
       :key="`designer-${reloadIndex}`"
       :options="{
-        taskResizingEnabled: true,
-        eventResizingEnabled: true,
         minimap: {
           open: true
         }
@@ -17,9 +15,34 @@
       @element-click="elementClick"
       @element-contextmenu="elementContextmenu"
       @init-finished="initModeler"
-    >
-    </my-process-designer>
-    <my-properties-panel :key="`penal-${reloadIndex}`" :bpmn-modeler="modeler" :prefix="controlForm.prefix" class="process-panel" />
+    />
+    <my-properties-panel :key="`penal-${reloadIndex}`" :bpmn-modeler="modeler" :prefix="controlForm.prefix" class="process-panel">
+      <template v-slot:business="{ values, emit }">
+        <div class="element-property input-property">
+          <div class="element-property__label">扩展描述：</div>
+          <div class="element-property__value">
+            <el-input
+              type="textarea"
+              :value="values['comment']"
+              @input="e => emit('comment', e)"
+              size="mini"
+              resize="vertical"
+              :autosize="{ minRows: 2, maxRows: 4 }"
+            />
+          </div>
+        </div>
+        <div class="element-property input-property">
+          <div class="element-property__label">生成日期：</div>
+          <div class="element-property__value">
+            <el-input
+              type="text"
+              :value="values['cami']"
+              @input="e => emit('cami', e)"
+            />
+          </div>
+        </div>
+      </template>
+    </my-properties-panel>
 
     <!-- demo config -->
     <div class="demo-control-bar">
@@ -94,14 +117,10 @@ import CustomContentPadProvider from "../package/designer/plugins/content-pad";
 // 自定义左侧菜单（修改 默认任务 为 用户任务）
 import CustomPaletteProvider from "../package/designer/plugins/palette";
 import Log from "../package/Log";
-// 任务resize
-import resizeTask from "bpmn-js-task-resize/lib";
-// bpmn theme plugin
-import sketchyRendererModule from "bpmn-js-sketchy";
 // 小地图
 import minimapModule from "diagram-js-minimap";
 
-import UserSql from "./modules/extension/user.json";
+import Business from "./modules/extension/business.json";
 
 // clickoutside
 import clickoutside from "element-ui/lib/utils/clickoutside";
@@ -131,7 +150,7 @@ export default {
         headerButtonSize: "mini",
         events: ["element.click", "element.contextmenu"],
         // additionalModel: []
-        moddleExtension: { user: UserSql },
+        moddleExtension: { business: Business },
         additionalModel: [
           CustomContentPadProvider,
           CustomPaletteProvider,

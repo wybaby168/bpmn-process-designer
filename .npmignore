@@ -1,0 +1,16 @@
+# 忽略目录
+src
+node_modules
+public
+script
+screenshot
+.github
+.idea
+dist
+# 忽略指定文件
+vue.config.js
+babel.config.js
+Dockerfile
+nginx.conf
+*.map
+jsconfig.json

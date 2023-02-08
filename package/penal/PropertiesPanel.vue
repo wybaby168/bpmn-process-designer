@@ -21,6 +21,14 @@
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-claim"></i>任务</div>
         <element-task :id="elementId" :type="elementType" />
       </el-collapse-item>
+      <el-collapse-item name="business" v-if="elementType === 'UserTask' && $scopedSlots.business" key="business">
+        <div slot="title" class="panel-tab__title"><i class="el-icon-s-tools"></i>业务属性</div>
+        <element-business-config :id="elementId">
+          <template v-slot:business="data">
+            <slot name="business" v-bind="data" />
+          </template>
+        </element-business-config>
+      </el-collapse-item>
       <el-collapse-item name="multiInstance" v-if="elementType.indexOf('Task') !== -1" key="multiInstance">
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-help"></i>多实例</div>
         <element-multi-instance :business-object="elementBusinessObject" :type="elementType" />
@@ -47,6 +55,7 @@
 <script>
 import ElementBaseInfo from "./base/ElementBaseInfo";
 import ElementOtherConfig from "./other/ElementOtherConfig";
+import ElementBusinessConfig from "./business/ElementBusinessConfig";
 import ElementTask from "./task/ElementTask";
 import ElementMultiInstance from "./multi-instance/ElementMultiInstance";
 import FlowCondition from "./flow-condition/FlowCondition";
@@ -74,6 +83,7 @@ export default {
     ElementMultiInstance,
     ElementTask,
     ElementOtherConfig,
+    ElementBusinessConfig,
     ElementBaseInfo
   },
   componentName: "MyPropertiesPanel",
@@ -95,7 +105,7 @@ export default {
   provide() {
     return {
       prefix: this.prefix,
-      width: this.width
+      width: this.width,
     };
   },
   data() {

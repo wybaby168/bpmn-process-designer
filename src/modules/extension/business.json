@@ -1,0 +1,22 @@
+{
+  "name": "BusinessVariables",
+  "uri": "http://business.org/schema/2.0/bpmn",
+  "prefix": "buz",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "associations": [],
+  "types": [
+    {
+      "name": "BusinessVariables",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "flowable:values",
+          "isMany": true,
+          "type": "flowable:Property"
+        }
+      ]
+    }
+  ]
+}

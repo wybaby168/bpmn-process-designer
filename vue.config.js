@@ -41,11 +41,11 @@ module.exports = {
   },
   chainWebpack: config => {
     // ============注入cdn start============
-    config.plugin("html").tap(args => {
-      // 生产环境或本地需要cdn时，才注入cdn
-      if (IS_PROD) args[0].cdn = CDN;
-      return args;
-    });
+    // config.plugin("html").tap(args => {
+    //   // 生产环境或本地需要cdn时，才注入cdn
+    //   if (IS_PROD) args[0].cdn = CDN;
+    //   return args;
+    // });
     // ============注入cdn start============
 
     config

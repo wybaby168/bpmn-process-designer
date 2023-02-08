@@ -526,6 +526,20 @@
       ]
     },
     {
+      "name": "BusinessVariables",
+      "superClass": ["Element"],
+      "meta": {
+        "allowedIn": ["*"]
+      },
+      "properties": [
+        {
+          "name": "values",
+          "isMany": true,
+          "type": "Property"
+        }
+      ]
+    },
+    {
       "name": "Button",
       "superClass": ["Element"],
       "meta": {

@@ -10,7 +10,7 @@ export default {
   "Append Gateway": "追加网关",
   "Append Task": "追加任务",
   "Append Intermediate/Boundary Event": "追加中间抛出事件/边界事件",
-
+  "Append element": "追加元素",
   "Activate the global connect tool": "激活全局连接工具",
   "Append {type}": "添加 {type}",
   "Add Lane above": "在上面添加道",
@@ -32,6 +32,7 @@ export default {
   "Create Pool/Participant": "创建池/参与者",
   "Parallel Multi Instance": "并行多重事件",
   "Sequential Multi Instance": "时序多重事件",
+
   DataObjectReference: "数据对象参考",
   DataStoreReference: "数据存储参考",
   Loop: "循环",

@@ -1,6 +1,6 @@
 {
   "name": "vue-wf-designer",
-  "version": "0.0.3",
+  "version": "1.0.5",
   "private": false,
   "description": "基于Vue2.x和ElementUI的流程设计器",
   "keywords": [
@@ -23,12 +23,14 @@
   },
   "scripts": {
     "demo": "vue-cli-service serve",
-    "build": "vue-cli-service build --report"
+    "build": "vue-cli-service build --report",
+    "build-lib": "vue-cli-service build --target lib --name vue-wf-designer --dest lib package/index.js"
   },
   "dependencies": {
-    "bpmn-js-sketchy": "^0.6.0",
-    "bpmn-js-task-resize": "^1.2.0",
+    "bpmn-js": "^11.3.0",
+    "bpmn-js-properties-panel": "^1.17.0",
     "bpmn-js-token-simulation": "^0.31.0",
+    "element-ui": "^2.15.12",
     "core-js": "^3.8.1",
     "diagram-js-minimap": "^4.0.1",
     "highlight.js": "^10.5.0",
@@ -36,7 +38,9 @@
     "vue": "^2.7.14",
     "vue-router": "^3.6.5",
     "x2js": "^3.4.4",
-    "xml-js": "^1.6.11"
+    "xml-js": "^1.6.11",
+    "axios": "^1.3.2",
+    "camunda-bpmn-moddle": "^4.4.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.19",
@@ -45,13 +49,8 @@
     "@vue/compiler-sfc": "^2.7.14",
     "vue-template-compiler": "^2.7.14",
     "@vue/eslint-config-prettier": "^5.0.0",
-    "axios": "^1.3.2",
     "babel-eslint": "^10.1.0",
-    "bpmn-js": "^11.3.0",
-    "bpmn-js-properties-panel": "^1.17.0",
-    "camunda-bpmn-moddle": "^4.4.1",
     "compression-webpack-plugin": "^6.1.1",
-    "element-ui": "^2.15.12",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^6.2.2",

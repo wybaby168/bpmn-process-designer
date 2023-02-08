@@ -4,7 +4,9 @@
       <slot name="control-header"></slot>
       <template v-if="!$slots['control-header']">
         <el-button-group key="file-control">
-          <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-folder-opened" @click="$refs.refFile.click()">打开文件</el-button>
+          <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-folder-opened"
+                     @click="$refs.refFile.click()">打开文件
+          </el-button>
           <el-tooltip effect="light">
             <div slot="content">
               <el-button :size="headerButtonSize" type="text" @click="downloadProcessAsXml()">下载为XML文件</el-button>
@@ -31,31 +33,39 @@
         </el-button-group>
         <el-button-group key="align-control">
           <el-tooltip effect="light" content="向左对齐">
-            <el-button :size="headerButtonSize" class="align align-left" icon="el-icon-s-data" @click="elementsAlign('left')" />
+            <el-button :size="headerButtonSize" class="align align-left" icon="el-icon-s-data"
+                       @click="elementsAlign('left')" />
           </el-tooltip>
           <el-tooltip effect="light" content="向右对齐">
-            <el-button :size="headerButtonSize" class="align align-right" icon="el-icon-s-data" @click="elementsAlign('right')" />
+            <el-button :size="headerButtonSize" class="align align-right" icon="el-icon-s-data"
+                       @click="elementsAlign('right')" />
           </el-tooltip>
           <el-tooltip effect="light" content="向上对齐">
-            <el-button :size="headerButtonSize" class="align align-top" icon="el-icon-s-data" @click="elementsAlign('top')" />
+            <el-button :size="headerButtonSize" class="align align-top" icon="el-icon-s-data"
+                       @click="elementsAlign('top')" />
           </el-tooltip>
           <el-tooltip effect="light" content="向下对齐">
-            <el-button :size="headerButtonSize" class="align align-bottom" icon="el-icon-s-data" @click="elementsAlign('bottom')" />
+            <el-button :size="headerButtonSize" class="align align-bottom" icon="el-icon-s-data"
+                       @click="elementsAlign('bottom')" />
           </el-tooltip>
           <el-tooltip effect="light" content="水平居中">
-            <el-button :size="headerButtonSize" class="align align-center" icon="el-icon-s-data" @click="elementsAlign('center')" />
+            <el-button :size="headerButtonSize" class="align align-center" icon="el-icon-s-data"
+                       @click="elementsAlign('center')" />
           </el-tooltip>
           <el-tooltip effect="light" content="垂直居中">
-            <el-button :size="headerButtonSize" class="align align-middle" icon="el-icon-s-data" @click="elementsAlign('middle')" />
+            <el-button :size="headerButtonSize" class="align align-middle" icon="el-icon-s-data"
+                       @click="elementsAlign('middle')" />
           </el-tooltip>
         </el-button-group>
         <el-button-group key="scale-control">
           <el-tooltip effect="light" content="缩小视图">
-            <el-button :size="headerButtonSize" :disabled="defaultZoom < 0.2" icon="el-icon-zoom-out" @click="processZoomOut()" />
+            <el-button :size="headerButtonSize" :disabled="defaultZoom < 0.2" icon="el-icon-zoom-out"
+                       @click="processZoomOut()" />
           </el-tooltip>
           <el-button :size="headerButtonSize">{{ Math.floor(this.defaultZoom * 10 * 10) + "%" }}</el-button>
           <el-tooltip effect="light" content="放大视图">
-            <el-button :size="headerButtonSize" :disabled="defaultZoom > 4" icon="el-icon-zoom-in" @click="processZoomIn()" />
+            <el-button :size="headerButtonSize" :disabled="defaultZoom > 4" icon="el-icon-zoom-in"
+                       @click="processZoomIn()" />
           </el-tooltip>
           <el-tooltip effect="light" content="重置视图并居中">
             <el-button :size="headerButtonSize" icon="el-icon-c-scale-to-original" @click="processReZoom()" />
@@ -63,10 +73,12 @@
         </el-button-group>
         <el-button-group key="stack-control">
           <el-tooltip effect="light" content="撤销">
-            <el-button :size="headerButtonSize" :disabled="!revocable" icon="el-icon-refresh-left" @click="processUndo()" />
+            <el-button :size="headerButtonSize" :disabled="!revocable" icon="el-icon-refresh-left"
+                       @click="processUndo()" />
           </el-tooltip>
           <el-tooltip effect="light" content="恢复">
-            <el-button :size="headerButtonSize" :disabled="!recoverable" icon="el-icon-refresh-right" @click="processRedo()" />
+            <el-button :size="headerButtonSize" :disabled="!recoverable" icon="el-icon-refresh-right"
+                       @click="processRedo()" />
           </el-tooltip>
           <el-tooltip effect="light" content="重新绘制">
             <el-button :size="headerButtonSize" icon="el-icon-refresh" @click="processRestart" />
@@ -74,7 +86,8 @@
         </el-button-group>
       </template>
       <!-- 用于打开本地文件-->
-      <input type="file" id="files" ref="refFile" style="display: none" accept=".xml, .bpmn" @change="importLocalFile" />
+      <input type="file" id="files" ref="refFile" style="display: none" accept=".xml, .bpmn"
+             @change="importLocalFile" />
     </div>
     <div class="my-process-designer__container">
       <div class="my-process-designer__canvas" ref="bpmn-canvas"></div>
@@ -105,6 +118,7 @@ import activitiModdleExtension from "./plugins/extension-moddle/activiti";
 import flowableModdleExtension from "./plugins/extension-moddle/flowable";
 // 引入json转换与高亮
 import X2JS from "x2js";
+import AppendContextPadProvider from "bpmn-js/lib/features/create-append-anything/AppendContextPadProvider";
 
 export default {
   name: "MyProcessDesigner",
@@ -251,6 +265,9 @@ export default {
   methods: {
     initBpmnModeler() {
       if (this.bpmnModeler) return;
+      // 去除无法被中文化的组件
+      AppendContextPadProvider.prototype.getContextPadEntries = () => ({});
+      // 实例化
       this.bpmnModeler = new BpmnModeler({
         container: this.$refs["bpmn-canvas"],
         keyboard: this.keyboard ? { bindTo: document } : null,
@@ -337,6 +354,7 @@ export default {
       } catch (e) {
         console.error(`[Process Designer Warn ]: ${e.message || e}`);
       }
+
       // 文件下载方法
       function downloadFunc(href, filename) {
         if (href && filename) {
