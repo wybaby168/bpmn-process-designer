@@ -1,6 +1,6 @@
 {
   "name": "vue-wf-designer",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "private": false,
   "description": "基于Vue2.x和ElementUI的流程设计器",
   "keywords": [
@@ -16,6 +16,7 @@
     "name": "Wangyu",
     "email": "wybaby168@gmail.com"
   },
+  "main": "package/index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:wybaby168/bpmn-process-designer.git"
