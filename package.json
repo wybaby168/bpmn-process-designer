@@ -1,19 +1,24 @@
 {
-  "name": "bpmn-process-designer",
+  "name": "vue-wf-designer",
   "version": "0.0.1",
+  "private": false,
   "description": "基于Vue2.x和ElementUI的流程设计器",
   "keywords": [
     "bpmn",
     "bpmn.js",
     "vue"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "author": {
     "name": "Wangyu",
     "email": "wybaby168@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:miyuesc/bpmn-process-designer.git"
+    "url": "git@github.com:wybaby168/bpmn-process-designer.git"
   },
   "scripts": {
     "demo": "vue-cli-service serve",
@@ -94,5 +99,5 @@
     "last 2 versions",
     "not dead"
   ],
-  "license": "Apache"
+  "license": "Apache-2.0"
 }
