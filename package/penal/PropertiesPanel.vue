@@ -65,6 +65,7 @@ import ElementProperties from "./properties/ElementProperties";
 import ElementForm from "./form/ElementForm";
 import UserTaskListeners from "./listeners/UserTaskListeners";
 import Log from "../Log";
+import mock from "./mock";
 /**
  * 侧边栏
  * @Author MiyueFE
@@ -100,12 +101,18 @@ export default {
     idEditDisabled: {
       type: Boolean,
       default: false
+    },
+    provider: {
+      type: Object,
+      default: () => mock,
+      description: "数据提供者，提供用户、部门、角色的查询。"
     }
   },
   provide() {
     return {
       prefix: this.prefix,
       width: this.width,
+      provider: this.provider
     };
   },
   data() {

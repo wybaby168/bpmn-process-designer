@@ -12,11 +12,11 @@ export default {
   data() {
     return {
       // 具体值
-      values: {},
+      values: {}
     };
   },
   inject: {
-    prefix: "prefix",
+    prefix: "prefix"
   },
   watch: {
     id: {
@@ -95,6 +95,6 @@ export default {
   },
   beforeDestroy() {
     this.bpmnElement = null;
-  },
+  }
 };
 </script>

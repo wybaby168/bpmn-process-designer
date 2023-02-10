@@ -34,11 +34,7 @@
         <div class="element-property input-property">
           <div class="element-property__label">生成日期：</div>
           <div class="element-property__value">
-            <el-input
-              type="text"
-              :value="values['cami']"
-              @input="e => emit('cami', e)"
-            />
+            <el-input type="text" :value="values['cami']" @input="e => emit('cami', e)" />
           </div>
         </div>
       </template>
