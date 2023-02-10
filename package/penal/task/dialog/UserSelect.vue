@@ -35,7 +35,8 @@
         <el-table ref="multipleTable" height="600" v-loading="loading" :data="users" border @select="handleSelect" @selection-change="handleSelection">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="用户名" align="center" prop="name" />
-          <el-table-column label="部门" align="center" prop="depart" />
+          <el-table-column label="部门" align="center" prop="depart.name" />
+          <el-table-column label="角色" align="center" prop="role.name" />
         </el-table>
         <pagination :total="pagination.total" :page.sync="pagination.page" :limit.sync="pagination.size" @pagination="loadData(true)" />
       </el-col>
