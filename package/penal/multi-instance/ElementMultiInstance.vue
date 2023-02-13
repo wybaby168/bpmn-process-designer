@@ -97,8 +97,8 @@ export default {
       this.loopInstanceForm = {
         ...this.defaultLoopInstanceForm,
         ...businessObject.loopCharacteristics,
-        completionCondition: businessObject.loopCharacteristics?.completionCondition?.body ?? "",
-        loopCardinality: businessObject.loopCharacteristics?.loopCardinality?.body ?? ""
+        completionCondition: businessObject.loopCharacteristics?.completionCondition?.body || "",
+        loopCardinality: businessObject.loopCharacteristics?.loopCardinality?.body || ""
       };
       // 保留当前元素 businessObject 上的 loopCharacteristics 实例
       this.multiLoopInstance = window.bpmnInstances.bpmnElement.businessObject.loopCharacteristics;

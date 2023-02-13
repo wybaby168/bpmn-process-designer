@@ -224,7 +224,7 @@ export default {
     resetListenersList() {
       this.bpmnElement = window.bpmnInstances.bpmnElement;
       this.otherExtensionList = [];
-      this.bpmnElementListeners = this.bpmnElement.businessObject?.extensionElements?.values?.filter(ex => ex.$type === `${this.prefix}:TaskListener`) ?? [];
+      this.bpmnElementListeners = this.bpmnElement.businessObject?.extensionElements?.values?.filter(ex => ex.$type === `${this.prefix}:TaskListener`) || [];
       this.elementListenersList = this.bpmnElementListeners.map(listener => initListenerType(listener));
     },
     openListenerForm(listener, index) {
@@ -276,7 +276,7 @@ export default {
         this.elementListenersList.splice(this.editingListenerIndex, 1, this.listenerForm);
       }
       // 保存其他配置
-      this.otherExtensionList = this.bpmnElement.businessObject?.extensionElements?.values?.filter(ex => ex.$type !== `${this.prefix}:TaskListener`) ?? [];
+      this.otherExtensionList = this.bpmnElement.businessObject?.extensionElements?.values?.filter(ex => ex.$type !== `${this.prefix}:TaskListener`) || [];
       updateElementExtensions(this.bpmnElement, this.otherExtensionList.concat(this.bpmnElementListeners));
       // 4. 隐藏侧边栏
       this.listenerFormModelVisible = false;

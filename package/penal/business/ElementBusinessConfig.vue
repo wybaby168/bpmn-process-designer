@@ -46,7 +46,7 @@ export default {
             this.otherExtensionList.push(ex);
           }
           return ex.$type === this.tag;
-        }) ?? [];
+        }) || [];
       // 保存所有的业务属性字段
       this.elements = properties.reduce((pre, current) => pre.concat(current.values), []);
       // 设置值
