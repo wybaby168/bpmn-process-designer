@@ -16,7 +16,8 @@ export default {
     };
   },
   inject: {
-    prefix: "prefix"
+    prefix: "prefix",
+    changer: "changer"
   },
   watch: {
     id: {
@@ -48,7 +49,6 @@ export default {
         }) ?? [];
       // 保存所有的业务属性字段
       this.elements = properties.reduce((pre, current) => pre.concat(current.values), []);
-      console.log(this.elements);
       // 设置值
       this.applyValues();
     },
@@ -59,6 +59,9 @@ export default {
         indexes[elem.name] = index;
         return obj;
       }, {});
+      if (this.changer) {
+        this.changer(this.values);
+      }
       this.indexes = indexes;
     },
     // 核心，改变值的方法，会触发xml节点更新
