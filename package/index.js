@@ -1,6 +1,6 @@
 import MyProcessDesigner from "./designer";
-import MyProcessPalette from "./palette";
 import MyProcessPenal from "./penal";
+import ProcessViewer from "./viewer";
 
 // 自定义元素选中时的弹出菜单（修改 默认任务 为 用户任务）
 import CustomContentPadProvider from "../package/designer/plugins/content-pad";
@@ -8,7 +8,7 @@ import CustomContentPadProvider from "../package/designer/plugins/content-pad";
 import CustomPaletteProvider from "../package/designer/plugins/palette";
 import Log from "../package/Log";
 
-const components = [MyProcessDesigner, MyProcessPenal, MyProcessPalette];
+const components = [MyProcessDesigner, MyProcessPenal, ProcessViewer];
 
 const install = function(Vue) {
   components.forEach(component => {
