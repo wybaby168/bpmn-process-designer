@@ -31,7 +31,7 @@ span:focus {
   overflow-y: auto;
 }
 
-.el-dialog {
+.el-dialog:not(.is-fullscreen) {
   margin-top: 50vh !important;
   transform: translateY(-50%);
   overflow: hidden;
