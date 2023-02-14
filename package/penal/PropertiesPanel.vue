@@ -177,15 +177,15 @@ export default {
     // 初始化数据
     initFormOnChanged(element) {
       let activatedElement = element;
+      const { bpmnInstances } = window;
       if (!activatedElement) {
         activatedElement =
-          window.bpmnInstances.elementRegistry.find(el => el.type === "bpmn:Process") ??
-          window.bpmnInstances.elementRegistry.find(el => el.type === "bpmn:Collaboration");
+          bpmnInstances.elementRegistry.find(el => el.type === "bpmn:Process") || bpmnInstances.elementRegistry.find(el => el.type === "bpmn:Collaboration");
       }
       if (!activatedElement) return;
       Log.printBack(`select element changed: id: ${activatedElement.id} , type: ${activatedElement.businessObject.$type}`);
       Log.prettyInfo("businessObject", activatedElement.businessObject);
-      window.bpmnInstances.bpmnElement = activatedElement;
+      bpmnInstances.bpmnElement = activatedElement;
       this.bpmnElement = activatedElement;
       this.elementId = activatedElement.id;
       this.elementType = activatedElement.type.split(":")[1] || "";
