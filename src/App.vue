@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <my-process-palette />
     <my-process-designer
       :key="`designer-${reloadIndex}`"
       :options="{
@@ -236,7 +235,7 @@ body {
   height: 100%;
   box-sizing: border-box;
   display: inline-grid;
-  grid-template-columns: 100px auto max-content;
+  grid-template-columns: auto max-content;
 }
 .demo-info-bar {
   position: fixed;
