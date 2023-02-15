@@ -1,5 +1,5 @@
 <template>
-  <div class="process-viewer">
+  <div class="process-viewer" v-bind="this.$attrs">
     <div class="process-canvas" style="height: 100%;" ref="processCanvas" v-show="!loading" />
     <!-- 自定义箭头样式，用于成功状态下流程连线箭头 -->
     <defs ref="customSuccessDefs">
@@ -196,6 +196,5 @@ export default {
   }
 };
 </script>
-;
 
-<style scoped></style>;
+<style scoped></style>
