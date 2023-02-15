@@ -7,7 +7,7 @@ Vue.prototype.$axios = axios;
 // 加载基础ElementUI
 import ElementUI from "element-ui";
 Vue.use(ElementUI);
-import "../package/theme/element-variables.scss";
+import "./element-variables.scss";
 
 import { vuePlugin } from "../package/highlight";
 import "highlight.js/styles/atom-one-dark-reasonable.css";
