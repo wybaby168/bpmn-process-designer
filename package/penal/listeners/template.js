@@ -18,7 +18,7 @@ export const template = isTaskListener => {
     </div>
 
     <!-- 监听器 编辑/创建 部分 -->
-    <el-drawer :visible.sync="listenerFormModelVisible" title="执行监听器" :size="width + 'px'" append-to-body destroy-on-close>
+    <el-drawer :visible.sync="listenerFormModelVisible" title="执行监听器" :size="width + 'px'" destroy-on-close>
       <el-form size="mini" :model="listenerForm" label-width="96px" ref="listenerFormRef" @submit.native.prevent>
         <el-form-item label="事件类型" prop="event" :rules="{ required: true, trigger: ['blur', 'change'] }">
           <el-select v-model="listenerForm.event">
@@ -139,7 +139,7 @@ export const template = isTaskListener => {
     </el-drawer>
 
     <!-- 注入西段 编辑/创建 部分 -->
-    <el-dialog title="字段配置" :visible.sync="listenerFieldFormModelVisible" width="600px" append-to-body destroy-on-close>
+    <el-dialog title="字段配置" :visible.sync="listenerFieldFormModelVisible" width="600px" destroy-on-close>
       <el-form :model="listenerFieldForm" size="mini" label-width="96px" ref="listenerFieldFormRef" style="height: 136px" @submit.native.prevent>
         <el-form-item label="字段名称：" prop="name" :rules="{ required: true, trigger: ['blur', 'change'] }">
           <el-input v-model="listenerFieldForm.name" clearable />

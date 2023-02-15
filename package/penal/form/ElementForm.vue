@@ -34,7 +34,7 @@
     </div>
 
     <!--字段配置侧边栏-->
-    <el-drawer :visible.sync="fieldModelVisible" title="字段配置" :size="`${width}px`" append-to-body destroy-on-close>
+    <el-drawer :visible.sync="fieldModelVisible" title="字段配置" :size="`${width}px`" destroy-on-close>
       <el-form :model="formFieldForm" label-width="90px" size="mini" @submit.native.prevent>
         <el-form-item label="字段ID">
           <el-input v-model="formFieldForm.id" clearable />
@@ -124,7 +124,7 @@
       </div>
     </el-drawer>
 
-    <el-dialog :visible.sync="fieldOptionModelVisible" :title="optionModelTitle" width="600px" append-to-body destroy-on-close>
+    <el-dialog :visible.sync="fieldOptionModelVisible" :title="optionModelTitle" width="600px" destroy-on-close>
       <el-form :model="fieldOptionForm" size="mini" label-width="96px" @submit.native.prevent>
         <el-form-item label="编号/ID" v-if="fieldOptionType !== 'constraint'" key="option-id">
           <el-input v-model="fieldOptionForm.id" clearable />

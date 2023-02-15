@@ -1,5 +1,5 @@
 <template>
-  <div class="my-process-designer">
+  <div class="process-container my-process-designer">
     <div class="my-process-designer__header">
       <slot name="control-header"></slot>
       <template v-if="!$slots['control-header']">
@@ -82,7 +82,7 @@
     <div class="my-process-designer__container">
       <div class="my-process-designer__canvas" ref="bpmn-canvas"></div>
     </div>
-    <el-dialog title="预览" width="60%" :visible.sync="previewModelVisible" append-to-body destroy-on-close>
+    <el-dialog title="预览" width="60%" :visible.sync="previewModelVisible" destroy-on-close>
       <highlightjs :language="previewType" :code="previewResult" />
     </el-dialog>
   </div>

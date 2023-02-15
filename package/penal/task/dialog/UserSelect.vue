@@ -4,7 +4,7 @@
     <el-row type="flex" :gutter="20">
       <!--部门数据-->
       <el-col :span="7">
-        <el-card shadow="never" style="height: 100%">
+        <el-card shadow="never" style="height: 550px">
           <div slot="header">
             <span>部门列表</span>
           </div>
@@ -32,7 +32,16 @@
         </el-card>
       </el-col>
       <el-col :span="17">
-        <el-table ref="multipleTable" height="600" v-loading="loading" :data="users" border @select="handleSelect" @selection-change="handleSelection">
+        <el-table
+          ref="multipleTable"
+          height="450"
+          v-loading="loading"
+          size="small"
+          :data="users"
+          border
+          @select="handleSelect"
+          @selection-change="handleSelection"
+        >
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="用户名" align="center" prop="name" />
           <el-table-column label="部门" align="center" prop="depart.name" />
