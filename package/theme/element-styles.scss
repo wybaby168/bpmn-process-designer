@@ -1,8 +1,13 @@
+.wf-container.el-dialog {
+  margin-top: 50vh !important;
+  transform: translateY(-50%);
+  overflow: hidden;
+}
 
-.process-container {
+.wf-container, .process-container {
   .el-table td,
   .el-table th {
-    color: #333;
+    color: #333 !important;
   }
   .el-drawer__header {
     padding: 16px 16px 8px 16px;
@@ -24,15 +29,6 @@
     overflow-y: auto;
   }
 
-  .el-dialog {
-    margin-top: 50vh !important;
-    transform: translateY(-50%);
-    overflow: hidden;
-  }
-  .el-dialog__wrapper {
-    overflow: hidden;
-    max-height: 100vh;
-  }
   .el-dialog__header {
     padding: 16px 16px 8px 16px;
     box-sizing: border-box;

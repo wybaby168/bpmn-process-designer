@@ -8,7 +8,7 @@
         <el-button size="mini" type="primary" icon="el-icon-plus" style="margin-left: 8px" @click="openMessageModel" />
       </div>
     </el-form-item>
-    <el-dialog :visible.sync="messageModelVisible" :close-on-click-modal="false" title="创建新消息" width="400px" destroy-on-close>
+    <el-dialog custom-class="wf-container" append-to-body :visible.sync="messageModelVisible" :close-on-click-modal="false" title="创建新消息" width="400px" destroy-on-close>
       <el-form :model="newMessageForm" size="mini" label-width="90px" @submit.native.prevent>
         <el-form-item label="消息ID">
           <el-input v-model="newMessageForm.id" clearable />

@@ -82,7 +82,7 @@
     <div class="my-process-designer__container">
       <div class="my-process-designer__canvas" ref="bpmn-canvas"></div>
     </div>
-    <el-dialog title="预览" width="60%" :visible.sync="previewModelVisible" destroy-on-close>
+    <el-dialog custom-class="wf-container" append-to-body title="预览" width="60%" :visible.sync="previewModelVisible" destroy-on-close>
       <highlightjs :language="previewType" :code="previewResult" />
     </el-dialog>
   </div>
