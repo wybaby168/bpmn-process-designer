@@ -1,5 +1,5 @@
 <template>
-  <div class="my-process-designer">
+  <div class="process-container my-process-designer">
     <div class="my-process-designer__header">
       <slot name="control-header"></slot>
       <template v-if="!$slots['control-header']">
