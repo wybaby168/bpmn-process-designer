@@ -1,6 +1,6 @@
 {
   "name": "vue-wf-designer",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "private": false,
   "description": "基于Vue2.x和ElementUI的流程设计器",
   "keywords": [

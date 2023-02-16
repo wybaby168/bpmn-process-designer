@@ -17,7 +17,6 @@ export default {
   },
   inject: {
     prefix: "prefix",
-    changer: "changer"
   },
   watch: {
     id: {
@@ -59,9 +58,6 @@ export default {
         indexes[elem.name] = index;
         return obj;
       }, {});
-      if (this.changer) {
-        this.changer(this.values);
-      }
       this.indexes = indexes;
     },
     // 核心，改变值的方法，会触发xml节点更新
