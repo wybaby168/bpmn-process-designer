@@ -17,7 +17,8 @@ export default {
   },
   inject: {
     prefix: "prefix",
-    changer: "changer"
+    changer: "changer",
+    variables: "variables"
   },
   watch: {
     id: {
@@ -54,11 +55,12 @@ export default {
     },
     applyValues() {
       const indexes = {};
-      this.values = this.elements.reduce((obj, elem, index) => {
+      const values = this.elements.reduce((obj, elem, index) => {
         obj[elem.name] = elem.value;
         indexes[elem.name] = index;
         return obj;
       }, {});
+      this.values = { ...this.variables(), ...values };
       if (this.changer) {
         this.changer(this.values);
       }
