@@ -54,7 +54,8 @@ export default {
         rejectedTasks: [],
         unfinishedTasks: [],
         finishedSequenceFlows: []
-      })
+      }),
+      description: "已完成流程元素"
     }
   },
   name: "ProcessViewer",
@@ -65,29 +66,18 @@ export default {
       loading: false,
       // 查看器实例
       bpmnViewer: undefined,
-      // 已完成流程元素
-      processNodeInfo: undefined
     };
   },
   watch: {
-    xml: {
-      handler(newXml) {
-        this.importXML(newXml);
-      },
-      immediate: true
+    xml() {
+      this.importXML();
     },
-    data: {
-      handler(newInfo) {
-        this.setProcessStatus(newInfo);
-      },
-      immediate: true
+    data(newInfo) {
+      this.updateProcessStatus();
     }
   },
-  created() {
-    this.$nextTick(() => {
-      this.importXML(this.xml);
-      this.setProcessStatus(this.data);
-    });
+  mounted() {
+    this.importXML();
   },
   methods: {
     processReZoom() {
@@ -130,33 +120,31 @@ export default {
       svg.appendChild(customFailDefs);
     },
     // 显示流程图
-    async importXML(xml) {
+    async importXML() {
       this.clearViewer();
-      if (xml) {
-        try {
-          this.bpmnViewer = new BpmnViewer({
-            additionalModules: [
-              // 移动整个画布
-              MoveCanvasModule
-            ],
-            container: this.$refs.processCanvas
-          });
-          this.loading = true;
-          await this.bpmnViewer.importXML(xml);
-          this.addCustomDefs();
-        } catch (e) {
-          this.clearViewer();
-        } finally {
-          this.loading = false;
-          this.setProcessStatus(this.processNodeInfo);
-        }
+      if (!this.xml) return;
+      try {
+        this.bpmnViewer = new BpmnViewer({
+          additionalModules: [
+            // 移动整个画布
+            MoveCanvasModule
+          ],
+          container: this.$refs.processCanvas
+        });
+        this.loading = true;
+        await this.bpmnViewer.importXML(this.xml);
+        this.addCustomDefs();
+      } catch (e) {
+        this.clearViewer();
+      } finally {
+        this.loading = false;
+        this.updateProcessStatus();
       }
     },
     // 设置流程图元素状态
-    setProcessStatus(processNodeInfo) {
-      this.processNodeInfo = processNodeInfo;
-      if (this.loading || this.processNodeInfo == null || this.bpmnViewer == null) return;
-      const { finishedTasks, rejectedTasks, unfinishedTasks, finishedSequenceFlows } = this.processNodeInfo;
+    updateProcessStatus() {
+      if (this.loading || this.data == null || this.bpmnViewer == null) return;
+      const { finishedTasks, rejectedTasks, unfinishedTasks, finishedSequenceFlows } = this.data;
       const canvas = this.bpmnViewer.get("canvas");
       const elementRegistry = this.bpmnViewer.get("elementRegistry");
       if (Array.isArray(finishedSequenceFlows)) {
