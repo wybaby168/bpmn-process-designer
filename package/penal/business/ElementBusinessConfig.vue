@@ -1,6 +1,6 @@
 <template>
   <div class="panel-tab__content">
-    <slot name="business" :values="values" :emit="handleChange"></slot>
+    <slot name="business" :values="values" :emit="handleChange" :id="id"></slot>
   </div>
 </template>
 <script>
@@ -17,8 +17,7 @@ export default {
   },
   inject: {
     prefix: "prefix",
-    changer: "changer",
-    variables: "variables"
+    changer: "changer"
   },
   watch: {
     id: {
@@ -55,12 +54,11 @@ export default {
     },
     applyValues() {
       const indexes = {};
-      const values = this.elements.reduce((obj, elem, index) => {
+      this.values = this.elements.reduce((obj, elem, index) => {
         obj[elem.name] = elem.value;
         indexes[elem.name] = index;
         return obj;
       }, {});
-      this.values = { ...this.variables(), ...values };
       if (this.changer) {
         this.changer(this.values);
       }

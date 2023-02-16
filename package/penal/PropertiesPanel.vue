@@ -90,10 +90,6 @@ export default {
   componentName: "MyPropertiesPanel",
   props: {
     bpmnModeler: Object,
-    defaultVariables: {
-      type: Function,
-      default: () => ({})
-    },
     prefix: {
       type: String,
       default: "camunda"
@@ -117,7 +113,6 @@ export default {
       prefix: this.prefix,
       width: this.width,
       provider: this.provider,
-      variables: this.defaultVariables
     };
   },
   data() {
