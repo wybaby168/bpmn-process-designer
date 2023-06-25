@@ -14,3 +14,5 @@ Dockerfile
 nginx.conf
 *.map
 jsconfig.json
+yarn-error.log
+

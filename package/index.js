@@ -26,4 +26,4 @@ export default {
   ...components
 };
 
-export { CustomContentPadProvider, CustomPaletteProvider, Log };
+export { CustomContentPadProvider, CustomPaletteProvider, Log, MyProcessDesigner, MyProcessPenal, ProcessViewer };
