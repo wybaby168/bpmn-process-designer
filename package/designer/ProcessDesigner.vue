@@ -310,9 +310,10 @@ export default {
         if (warnings && warnings.length) {
           warnings.forEach(warn => console.warn(warn));
         }
-        this.$nextTick(() => this.processReZoom());
       } catch (e) {
         console.error(`[Process Designer Warn]: ${e?.message || e}`);
+      } finally {
+        this.$nextTick(() => this.processReZoom());
       }
     },
 

@@ -1,7 +1,12 @@
 <template>
   <div style="margin-top: 16px">
     <el-form-item label="脚本格式">
-      <el-input v-model="scriptTaskForm.scriptFormat" clearable @input="updateElementTask()" @change="updateElementTask()" />
+      <el-select v-model="scriptTaskForm.scriptFormat" clearable @input="updateElementTask()"
+                 @change="updateElementTask()">
+        <el-option label="Groovy脚本" value="groovy" />
+        <el-option label="Juel脚本" value="juel" />
+        <el-option label="Javascript脚本" value="javascript" />
+      </el-select>
     </el-form-item>
     <el-form-item label="脚本类型">
       <el-select v-model="scriptTaskForm.scriptType">
@@ -12,13 +17,12 @@
     <el-form-item label="脚本" v-show="scriptTaskForm.scriptType === 'inline'">
       <el-input
         v-model="scriptTaskForm.script"
-        type="textarea"
-        resize="vertical"
-        :autosize="{ minRows: 2, maxRows: 4 }"
         clearable
         @input="updateElementTask()"
         @change="updateElementTask()"
-      />
+      >
+        <el-button slot="append" icon="el-icon-edit" @click="showScript"></el-button>
+      </el-input>
     </el-form-item>
     <el-form-item label="资源地址" v-show="scriptTaskForm.scriptType === 'external'">
       <el-input v-model="scriptTaskForm.resource" clearable @input="updateElementTask()" @change="updateElementTask()" />
@@ -26,6 +30,21 @@
     <el-form-item label="结果变量">
       <el-input v-model="scriptTaskForm.resultVariable" clearable @input="updateElementTask()" @change="updateElementTask()" />
     </el-form-item>
+    <el-dialog title="编辑脚本" :visible.sync="scriptVisible">
+      <el-input
+        v-model="scriptCache"
+        type="textarea"
+        resize="vertical"
+        :autosize="{ minRows: 5 }"
+        clearable
+        @input="updateElementTask()"
+        @change="updateElementTask()"
+      />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="scriptVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmScript">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -38,7 +57,10 @@ export default {
   },
   data() {
     return {
+      scriptVisible: false,
+      scriptCache: "",
       defaultTaskForm: {
+        scriptType: "inline",
         scriptFormat: "",
         script: "",
         resource: "",
@@ -62,7 +84,7 @@ export default {
         let value = this.bpmnElement?.businessObject[key] || this.defaultTaskForm[key];
         this.$set(this.scriptTaskForm, key, value);
       }
-      this.$set(this.scriptTaskForm, "scriptType", this.scriptTaskForm.script ? "inline" : "external");
+      // this.$set(this.scriptTaskForm, "scriptType", this.scriptTaskForm.script ? "inline" : "external");
     },
     updateElementTask() {
       let taskAttr = Object.create(null);
@@ -76,6 +98,16 @@ export default {
         taskAttr.script = null;
       }
       window.bpmnInstances.modeling.updateProperties(this.bpmnElement, taskAttr);
+    },
+    showScript() {
+      this.scriptVisible = true;
+      this.scriptCache = this.scriptTaskForm.script;
+    },
+    confirmScript() {
+      this.scriptTaskForm.script = this.scriptCache;
+      this.updateElementTask();
+      this.scriptVisible = false;
+      this.scriptCache = "";
     }
   },
   beforeDestroy() {
