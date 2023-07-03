@@ -67,7 +67,11 @@
             key="listener-script-format"
             :rules="{ required: true, trigger: ['blur', 'change'], message: '请填写脚本格式' }"
           >
-            <el-input v-model="listenerForm.scriptFormat" clearable />
+            <el-select v-model="listenerForm.scriptFormat" clearable>
+              <el-option label="Groovy脚本" value="groovy" />
+              <el-option label="Juel脚本" value="juel" />
+              <el-option label="Javascript脚本" value="javascript" />
+            </el-select>
           </el-form-item>
           <el-form-item
             label="脚本类型"
@@ -87,7 +91,13 @@
             key="listener-script"
             :rules="{ required: true, trigger: ['blur', 'change'], message: '请填写脚本内容' }"
           >
-            <el-input v-model="listenerForm.value" clearable />
+            <el-input
+              v-model="listenerForm.value"
+              type="textarea"
+              resize="vertical"
+              :autosize="{ minRows: 5 }"
+              clearable
+            />
           </el-form-item>
           <el-form-item
             v-if="listenerForm.scriptType === 'externalScript'"
