@@ -6,12 +6,14 @@
         <el-radio label="USERS">指定用户</el-radio>
         <el-radio label="GROUPS">多候选人</el-radio>
         <el-radio label="INITIATOR">发起人</el-radio>
+        <el-radio label="EXPRESSION">表达式</el-radio>
       </el-radio-group>
     </el-row>
     <el-row>
       <div v-if="dataType === 'USERS'">
         <div v-if="userTaskForm.assignee">
-          已选中：<el-tag>{{ userTaskForm.assignee }}</el-tag>
+          已选中：
+          <el-tag>{{ userTaskForm.assignee }}</el-tag>
         </div>
         <div class="element-drawer__button">
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="selectAssignee">选择用户</el-button>
@@ -19,7 +21,9 @@
       </div>
       <div v-if="dataType === 'GROUPS'">
         <el-form-item label="候选用户">
-          <el-tag :key="item" v-for="item in userTaskForm.candidateUsers" effect="plain" closable @close="removeCandidates(item)">{{ item }}</el-tag>
+          <el-tag :key="item" v-for="item in userTaskForm.candidateUsers" effect="plain" closable
+                  @close="removeCandidates(item)">{{ item }}
+          </el-tag>
           <div>
             <el-button size="mini" type="primary" icon="el-icon-plus" @click="selectCandidates">选择用户</el-button>
           </div>
@@ -41,8 +45,22 @@
         </el-form-item>
         <el-form-item label="候选角色">
           <el-select v-model="candidateRoles" multiple collapse-tags @change="updateElementTask('candidateGroups')">
-            <el-option v-for="d in data.roles" :key="d.id" :label="d.name" :value="`ROLE-${d.id}:${d.name}`" />
+            <el-option v-for="d in data.roles" :key="d.id" :label="d.name" :value="`ROLE-${d.id}`" />
           </el-select>
+        </el-form-item>
+      </div>
+      <div v-if="dataType === 'EXPRESSION'">
+        <el-form-item label="表达式类型">
+          <el-radio-group v-model="expressionType">
+            <el-radio label="assignee">执行人表达式</el-radio>
+            <el-radio label="candidateUsers">候选人表达式</el-radio>
+            <el-radio label="candidateGroups">候选组表达式</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="表达式">
+          <el-input v-model="userTaskForm[expressionType]" @change="updateElementTask(expressionType)"
+                    placeholder="请输入表达式" />
+          <span style="color: grey">表达式必须以${开头，否则无法解析！</span>
         </el-form-item>
       </div>
     </el-row>
@@ -52,9 +70,15 @@
         <h4><b>多实例审批方式</b></h4>
         <el-row style="padding-left: 25px">
           <el-radio-group v-model="multiLoopType" @change="changeMultiLoopType">
-            <el-row><el-radio label="Null">无</el-radio></el-row>
-            <el-row><el-radio label="SequentialMultiInstance">会签（需所有审批人同意）</el-radio></el-row>
-            <el-row><el-radio label="ParallelMultiInstance">或签（一名审批人同意即可）</el-radio></el-row>
+            <el-row>
+              <el-radio label="Null">无</el-radio>
+            </el-row>
+            <el-row>
+              <el-radio label="SequentialMultiInstance">会签（需所有审批人同意）</el-radio>
+            </el-row>
+            <el-row>
+              <el-radio label="ParallelMultiInstance">或签（一名审批人同意即可）</el-radio>
+            </el-row>
           </el-radio-group>
         </el-row>
         <el-row v-if="multiLoopType !== 'Null'">
@@ -139,6 +163,7 @@ export default {
     };
     return {
       dataType: "USERS",
+      expressionType: "assignee",
       defaultTaskForm,
       userTaskForm: {},
       data: {
@@ -189,10 +214,11 @@ export default {
     resetTaskForm() {
       for (let key in this.defaultTaskForm) {
         let value;
+        const take = this.bpmnElement?.businessObject[key];
         if (key === "candidateUsers" || key === "candidateGroups") {
-          value = this.bpmnElement?.businessObject[key] ? this.bpmnElement.businessObject[key].split(",") : [];
+          value = take?.startsWith("${") ? take : take ? take.split(",") : [];
         } else {
-          value = this.bpmnElement?.businessObject[key] || this.defaultTaskForm[key];
+          value = take || this.defaultTaskForm[key];
         }
         this.$set(this.userTaskForm, key, value);
       }
@@ -200,8 +226,13 @@ export default {
       const {
         userTaskForm: { assignee, candidateGroups, candidateUsers }
       } = this;
+      const exp = [assignee, candidateUsers, candidateGroups].findIndex(val => typeof val === "string" && val.startsWith("${"));
+      console.log(exp);
       if (assignee?.startsWith("${initiator}")) {
         this.dataType = "INITIATOR";
+      } else if (exp !== -1) {
+        this.dataType = "EXPRESSION";
+        this.expressionType = ["assignee", "candidateUsers", "candidateGroups"][exp];
       } else if (candidateGroups?.length || candidateUsers?.length) {
         this.dataType = "GROUPS";
       } else {
@@ -212,17 +243,18 @@ export default {
     async loadData() {
       const { departs, roles } = this.provider;
       this.data.departs = mapTree(await departs(), node => {
-        node.id = `DEPART-${node.id}:${node.name}`;
+        node.id = `DEPART-${node.id}`;
         return node;
       });
       this.data.roles = await roles();
     },
     // 准备更新属性
     applyKeyValue(taskAttr, key) {
-      if (key === "candidateUsers" || key === "candidateGroups") {
-        taskAttr[key] = this.userTaskForm[key] && this.userTaskForm[key].length ? this.userTaskForm[key].join() : null;
+      const value = this.userTaskForm[key];
+      if (Array.isArray(value)) {
+        taskAttr[key] = value.length ? this.userTaskForm[key].join() : null;
       } else {
-        taskAttr[key] = this.userTaskForm[key] || null;
+        taskAttr[key] = value ?? null;
       }
     },
     // 更新到节点数据
@@ -239,11 +271,11 @@ export default {
     },
     // 选择执行人
     async selectAssignee() {
-      const [id, name] = this.userTaskForm.assignee?.split(":") || [];
-      const values = await this.$refs.user.select(false, id ? [{ id, name }] : []);
+      const id = this.userTaskForm.assignee;
+      const values = await this.$refs.user.select(false, id ? [{ id }] : []);
       if (values.length) {
-        const [{ id, name }] = values;
-        this.userTaskForm.assignee = `${id}:${name}`;
+        const [{ id }] = values;
+        this.userTaskForm.assignee = id;
       } else {
         this.userTaskForm.assignee = "";
       }
@@ -252,11 +284,11 @@ export default {
     // 选择候选人
     async selectCandidates() {
       const selected = (this.userTaskForm.candidateUsers || []).map(key => {
-        const [id, name] = key.split(":");
-        return { id, name };
+        const id = key;
+        return { id };
       });
       const values = await this.$refs.user.select(true, selected);
-      this.userTaskForm.candidateUsers = values.map(({ id, name }) => `${id}:${name}`);
+      this.userTaskForm.candidateUsers = values.map(({ id }) => id);
       this.updateElementTask("candidateUsers");
     },
     // 删除候选人
@@ -275,7 +307,7 @@ export default {
         userTaskForm.assignee = "";
         this.loadData();
       } else if (val === "INITIATOR") {
-        userTaskForm.assignee = "${initiator}" + ":流程发起人";
+        userTaskForm.assignee = "${initiator}";
       }
       this.updateElementTask();
     },
@@ -318,12 +350,15 @@ export default {
 <style lang="scss">
 .el-row .el-radio-group {
   margin-bottom: 15px;
+
   .el-radio {
     line-height: 28px;
   }
 }
+
 .el-tag {
   margin-bottom: 10px;
+
   + .el-tag {
     margin-left: 10px;
   }
