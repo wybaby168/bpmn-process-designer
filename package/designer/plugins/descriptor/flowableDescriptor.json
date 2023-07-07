@@ -751,7 +751,7 @@
       "superClass": ["InputOutputParameterDefinition"],
       "properties": [
         {
-          "name": "scriptFormat",
+          "name": "language",
           "isAttr": true,
           "type": "String"
         },

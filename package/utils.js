@@ -6,6 +6,7 @@ export function createListenerObject(options, isTask, prefix) {
   switch (options.listenerType) {
     case "scriptListener":
       listenerObj.script = createScriptObject(options, prefix);
+      listenerObj.type = "script";
       break;
     case "expressionListener":
       listenerObj.expression = options.expression;
@@ -46,7 +47,7 @@ export function createFieldObject(option, prefix) {
 // 创建脚本实例
 export function createScriptObject(options, prefix) {
   const { scriptType, scriptFormat, value, resource } = options;
-  const scriptConfig = scriptType === "inlineScript" ? { scriptFormat, value } : { scriptFormat, resource };
+  const scriptConfig = scriptType === "inlineScript" ? { language: scriptFormat, value } : { scriptFormat, resource };
   return window.bpmnInstances.moddle.create(`${prefix}:Script`, scriptConfig);
 }
 
