@@ -248,9 +248,9 @@ export default {
         this.dataType = "GROUPS";
       } else {
         this.dataType = "USERS";
-        // 回显用户
-        this.displayUsers();
       }
+      // 回显用户
+      this.displayUsers();
     },
     // 加载数据
     async loadData() {
