@@ -13,7 +13,7 @@
       <div v-if="dataType === 'USERS'">
         <div v-if="userTaskForm.assignee">
           已选中：
-          <el-tag>{{ userTaskForm.assignee }}</el-tag>
+          <el-tag>{{ name(userTaskForm.assignee) }}</el-tag>
         </div>
         <div class="element-drawer__button">
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="selectAssignee">选择用户</el-button>
@@ -21,8 +21,8 @@
       </div>
       <div v-if="dataType === 'GROUPS'">
         <el-form-item label="候选用户">
-          <el-tag :key="item" v-for="item in userTaskForm.candidateUsers" effect="plain" closable
-                  @close="removeCandidates(item)">{{ item }}
+          <el-tag :key="item" v-for="item in userTaskForm.candidateUsers" effect="plain" closable @close="removeCandidates(item)">
+            {{ name(item) }}
           </el-tag>
           <div>
             <el-button size="mini" type="primary" icon="el-icon-plus" @click="selectCandidates">选择用户</el-button>
@@ -170,6 +170,7 @@ export default {
         departs: [],
         roles: []
       },
+      userDict: {},
       isSequential: false,
       multiLoopType: "Null"
     };
@@ -177,6 +178,19 @@ export default {
   computed: {
     multiInstance() {
       return this.dataType === "GROUPS";
+    },
+    // 计算得到的需要回显的用户id集合
+    userIds() {
+      if (this.dataType === "USERS") {
+        const { candidateUsers, assignee } = this.userTaskForm;
+        if (candidateUsers?.length) {
+          return candidateUsers;
+        }
+        if (assignee) {
+          return [assignee];
+        }
+      }
+      return [];
     },
     candidateDeparts: {
       get() {
@@ -227,7 +241,6 @@ export default {
         userTaskForm: { assignee, candidateGroups, candidateUsers }
       } = this;
       const exp = [assignee, candidateUsers, candidateGroups].findIndex(val => typeof val === "string" && val.startsWith("${"));
-      console.log(exp);
       if (assignee?.startsWith("${initiator}")) {
         this.dataType = "INITIATOR";
       } else if (exp !== -1) {
@@ -237,6 +250,8 @@ export default {
         this.dataType = "GROUPS";
       } else {
         this.dataType = "USERS";
+        // 回显用户
+        this.displayUsers();
       }
     },
     // 加载数据
@@ -247,6 +262,27 @@ export default {
         return node;
       });
       this.data.roles = await roles();
+    },
+    // 回显用户名称
+    async displayUsers() {
+      const ids = this.userIds;
+      if (ids?.length) {
+        const { users } = this.provider;
+        const { list, total = 0 } = await users({
+          page: 1,
+          size: 100,
+          ids
+        });
+        if (total > 0) {
+          this.userDict = list?.reduce((res, user) => {
+            res[user.id] = user.name || user.id;
+            return res;
+          }, {});
+        }
+      }
+    },
+    name(id) {
+      return this.userDict[id] || id;
     },
     // 准备更新属性
     applyKeyValue(taskAttr, key) {
@@ -280,6 +316,7 @@ export default {
         this.userTaskForm.assignee = "";
       }
       this.updateElementTask("assignee");
+      return this.displayUsers();
     },
     // 选择候选人
     async selectCandidates() {
@@ -290,6 +327,7 @@ export default {
       const values = await this.$refs.user.select(true, selected);
       this.userTaskForm.candidateUsers = values.map(({ id }) => id);
       this.updateElementTask("candidateUsers");
+      return this.displayUsers();
     },
     // 删除候选人
     removeCandidates(key) {

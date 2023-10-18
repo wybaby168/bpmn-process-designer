@@ -1,6 +1,6 @@
 <template>
   <!-- 候选用户弹窗 -->
-  <el-dialog title="候选用户" :visible.sync="visible" width="60%" append-to-body>
+  <el-dialog title="候选用户" :visible.sync="visible" width="1000px" append-to-body>
     <el-row type="flex" :gutter="20">
       <!--部门数据-->
       <el-col :span="7">
@@ -19,6 +19,7 @@
               style="margin-bottom: 20px"
             />
             <el-tree
+              class="depart-tree"
               v-loading="loading"
               :data="departs"
               :props="{ label: 'name', children: 'children' }"
@@ -39,15 +40,17 @@
           size="small"
           :data="users"
           border
+          row-key="id"
           @select="handleSelect"
           @selection-change="handleSelection"
         >
-          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column type="selection" width="50" reserve-selection align="center" />
           <el-table-column label="用户名" align="center" prop="name" />
           <el-table-column label="部门" align="center" prop="depart.name" />
           <el-table-column label="角色" align="center" prop="role.name" />
         </el-table>
-        <pagination :total="pagination.total" :page.sync="pagination.page" :limit.sync="pagination.size" @pagination="loadData(true)" />
+        <pagination :total="pagination.total" :page.sync="pagination.page" :limit.sync="pagination.size"
+                    @pagination="loadData(true)" />
       </el-col>
     </el-row>
     <div slot="footer" class="dialog-footer">
@@ -144,6 +147,7 @@ export default {
       this.departs = [];
       this.users = [];
       this.pagination = EMPTY_PAGE();
+      this.$refs.multipleTable?.clearSelection();
     },
     handleOk() {
       this.resolve(this.selected);
@@ -155,4 +159,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.depart-tree {
+  max-height: 410px;
+  overflow-y: auto;
+}
+</style>

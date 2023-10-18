@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mask" v-show="isShowSelect" @click="isShowSelect = !isShowSelect"></div>
-    <el-popover placement="bottom-start" :width="width" trigger="manual" v-model="isShowSelect" @hide="popoverHide">
+    <el-popover placement="bottom-start" :width="width" trigger="manual" v-model="isShowSelect" @hide="popoverHide" popper-class="scroller">
       <el-select
         slot="reference"
         ref="select"
@@ -286,12 +286,17 @@ export default {
   opacity: 0;
   z-index: 11;
 }
-
 .common-tree {
   overflow: auto;
 }
 
 .tree-select {
   z-index: 111;
+}
+</style>
+<style>
+.el-popover.el-popper.scroller {
+  max-height: 500px;
+  overflow-y: auto;
 }
 </style>
