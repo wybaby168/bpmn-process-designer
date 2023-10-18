@@ -271,7 +271,7 @@ export default {
         const { list, total = 0 } = await users({
           page: 1,
           size: 100,
-          ids
+          ids: ids.join(",")
         });
         if (total > 0) {
           this.userDict = list?.reduce((res, user) => {
