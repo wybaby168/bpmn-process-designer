@@ -13,7 +13,7 @@ function is(element, type) {
 }
 
 function exists(element) {
-  return element && element.length;
+  return element?.length;
 }
 
 function includesType(collection, type) {

@@ -56,7 +56,7 @@ export default {
     id: {
       immediate: true,
       handler(val) {
-        val && val.length && this.resetAttributesList();
+        val?.length && this.resetAttributesList();
       }
     }
   },

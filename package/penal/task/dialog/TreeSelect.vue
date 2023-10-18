@@ -170,15 +170,15 @@ export default {
     },
     // 多选，清空所有勾选
     clearSelectedNodes() {
-      var checkedKeys = this.$refs.tree.getCheckedKeys(); // 所有被选中的节点的 key 所组成的数组数据
-      for (let i = 0; i < checkedKeys.length; i++) {
+      const checkedKeys = this.$refs.tree.getCheckedKeys(); // 所有被选中的节点的 key 所组成的数组数据
+      for (let i = 0; i < checkedKeys?.length; i++) {
         this.$refs.tree.setChecked(checkedKeys[i], false);
       }
     },
     initCheckedData() {
       if (this.multiple) {
         // 多选
-        if (this.checkedKeys.length > 0) {
+        if (this.checkedKeys?.length > 0) {
           this.selectedData = this.checkedKeys;
           this.checkSelectedNodes(this.checkedKeys);
         } else {
@@ -187,7 +187,7 @@ export default {
         }
       } else {
         // 单选
-        if (this.checkedKeys.length > 0) {
+        if (this.checkedKeys?.length > 0) {
           this.selectedData = this.checkedKeys[0];
           this.checkSelectedNode(this.checkedKeys);
         } else {

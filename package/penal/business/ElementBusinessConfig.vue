@@ -22,7 +22,7 @@ export default {
     id: {
       immediate: true,
       handler: function(id) {
-        if (id && id.length) {
+        if (id?.length) {
           this.resetValues();
         }
       }

@@ -188,7 +188,7 @@ export default {
     id: {
       immediate: true,
       handler(val) {
-        val && val.length && this.$nextTick(() => this.resetFormList());
+        val?.length && this.$nextTick(() => this.resetFormList());
       }
     }
   },
@@ -298,7 +298,7 @@ export default {
       defaultValue && (Field.defaultValue = defaultValue);
       datePattern && (Field.datePattern = datePattern);
       // 构建属性
-      if (this.fieldPropertiesList && this.fieldPropertiesList.length) {
+      if (this.fieldPropertiesList?.length) {
         const fieldPropertyList = this.fieldPropertiesList.map(fp => {
           return window.bpmnInstances.moddle.create(`${this.prefix}:Property`, { id: fp.id, value: fp.value });
         });
@@ -307,7 +307,7 @@ export default {
         });
       }
       // 构建校验规则
-      if (this.fieldConstraintsList && this.fieldConstraintsList.length) {
+      if (this.fieldConstraintsList?.length) {
         const fieldConstraintList = this.fieldConstraintsList.map(fc => {
           return window.bpmnInstances.moddle.create(`${this.prefix}:Constraint`, { name: fc.name, config: fc.config });
         });
@@ -316,7 +316,7 @@ export default {
         });
       }
       // 构建枚举值
-      if (this.fieldEnumList && this.fieldEnumList.length) {
+      if (this.fieldEnumList?.length) {
         Field.values = this.fieldEnumList.map(fe => {
           return window.bpmnInstances.moddle.create(`${this.prefix}:Value`, { name: fe.name, id: fe.id });
         });

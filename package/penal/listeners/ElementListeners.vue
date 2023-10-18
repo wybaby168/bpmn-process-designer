@@ -191,7 +191,7 @@ export default {
     id: {
       immediate: true,
       handler(val) {
-        val && val.length && this.$nextTick(() => this.resetListenersList());
+        val?.length && this.$nextTick(() => this.resetListenersList());
       }
     }
   },

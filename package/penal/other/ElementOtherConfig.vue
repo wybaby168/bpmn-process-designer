@@ -32,10 +32,10 @@ export default {
     id: {
       immediate: true,
       handler: function(id) {
-        if (id && id.length) {
+        if (id?.length) {
           this.$nextTick(() => {
             const documentations = window.bpmnInstances.bpmnElement.businessObject?.documentation;
-            this.documentation = documentations && documentations.length ? documentations[0].text : "";
+            this.documentation = documentations?.length ? documentations[0].text : "";
           });
         } else {
           this.documentation = "";

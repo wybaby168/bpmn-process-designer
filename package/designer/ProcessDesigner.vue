@@ -307,7 +307,7 @@ export default {
       let xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
       try {
         let { warnings } = await this.bpmnModeler.importXML(xmlString);
-        if (warnings && warnings.length) {
+        if (warnings?.length) {
           warnings.forEach(warn => console.warn(warn));
         }
       } catch (e) {

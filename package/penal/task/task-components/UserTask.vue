@@ -181,14 +181,12 @@ export default {
     },
     // 计算得到的需要回显的用户id集合
     userIds() {
-      if (this.dataType === "USERS") {
-        const { candidateUsers, assignee } = this.userTaskForm;
-        if (candidateUsers?.length) {
-          return candidateUsers;
-        }
-        if (assignee) {
-          return [assignee];
-        }
+      const { candidateUsers, assignee } = this.userTaskForm;
+      if (candidateUsers?.length) {
+        return candidateUsers;
+      }
+      if (assignee) {
+        return [assignee];
       }
       return [];
     },
@@ -309,7 +307,7 @@ export default {
     async selectAssignee() {
       const id = this.userTaskForm.assignee;
       const values = await this.$refs.user.select(false, id ? [{ id }] : []);
-      if (values.length) {
+      if (values?.length) {
         const [{ id }] = values;
         this.userTaskForm.assignee = id;
       } else {

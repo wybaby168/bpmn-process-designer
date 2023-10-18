@@ -197,7 +197,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
       }
     });
 
-    if (childLanes.length < 2) {
+    if (childLanes?.length < 2) {
       if (element.height >= 120) {
         assign(actions, {
           "lane-divide-two": {

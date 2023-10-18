@@ -103,11 +103,7 @@ export default {
       // 保留当前元素 businessObject 上的 loopCharacteristics 实例
       this.multiLoopInstance = window.bpmnInstances.bpmnElement.businessObject.loopCharacteristics;
       // 更新表单
-      if (
-        businessObject.loopCharacteristics.extensionElements &&
-        businessObject.loopCharacteristics.extensionElements.values &&
-        businessObject.loopCharacteristics.extensionElements.values.length
-      ) {
+      if (businessObject.loopCharacteristics?.extensionElements?.values?.length) {
         this.$set(this.loopInstanceForm, "timeCycle", businessObject.loopCharacteristics.extensionElements.values[0].body);
       }
     },
@@ -142,7 +138,7 @@ export default {
     // 循环基数
     updateLoopCardinality(cardinality) {
       let loopCardinality = null;
-      if (cardinality && cardinality.length) {
+      if (cardinality?.length) {
         loopCardinality = window.bpmnInstances.moddle.create("bpmn:FormalExpression", { body: cardinality });
       }
       window.bpmnInstances.modeling.updateModdleProperties(this.bpmnElement, this.multiLoopInstance, {
@@ -152,7 +148,7 @@ export default {
     // 完成条件
     updateLoopCondition(condition) {
       let completionCondition = null;
-      if (condition && condition.length) {
+      if (condition?.length) {
         completionCondition = window.bpmnInstances.moddle.create("bpmn:FormalExpression", { body: condition });
       }
       window.bpmnInstances.modeling.updateModdleProperties(this.bpmnElement, this.multiLoopInstance, {
