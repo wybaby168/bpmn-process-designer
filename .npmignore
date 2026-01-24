@@ -17,6 +17,7 @@ nginx.conf
 jsconfig.json
 yarn-error.log
 .DS_Store
+.npmrc
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
