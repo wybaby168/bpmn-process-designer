@@ -7,6 +7,7 @@ screenshot
 .github
 .idea
 dist
+docs
 # 忽略指定文件
 vue.config.js
 babel.config.js
@@ -15,4 +16,7 @@ nginx.conf
 *.map
 jsconfig.json
 yarn-error.log
-
+.DS_Store
+pnpm-lock.yaml
+yarn.lock
+package-lock.json

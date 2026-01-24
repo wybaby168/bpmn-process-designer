@@ -439,8 +439,27 @@ export default {
       this.bpmnModeler.get("canvas").zoom(newZoom);
     },
     processReZoom() {
-      this.defaultZoom = 1;
-      this.bpmnModeler.get("canvas").zoom("fit-viewport", "auto");
+      if (!this.bpmnModeler) return;
+      const canvas = this.bpmnModeler.get("canvas");
+      canvas?.resized?.();
+
+      const elementRegistry = this.bpmnModeler.get("elementRegistry");
+      const rootElement = canvas.getRootElement();
+      const elements = elementRegistry.filter(e => e.parent === rootElement && e.type !== "label");
+
+      if (elements.length) {
+        canvas.zoom("fit-viewport", "auto");
+        return;
+      }
+
+      canvas.zoom(1);
+      const viewbox = canvas.viewbox();
+      canvas.viewbox({
+        x: 0,
+        y: 0,
+        width: viewbox.width,
+        height: viewbox.height
+      });
     },
     processRestart() {
       this.recoverable = false;

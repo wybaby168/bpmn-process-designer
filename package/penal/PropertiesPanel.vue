@@ -15,7 +15,10 @@
       </el-collapse-item>
       <el-collapse-item name="condition" v-if="formVisible" key="form">
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-order"></i>表单</div>
-        <element-form :id="elementId" :type="elementType" />
+        <template v-if="$scopedSlots.form || $slots.form">
+          <slot name="form" v-bind="{ id: elementId, elementId, type: elementType, businessObject: elementBusinessObject, element: bpmnElement }" />
+        </template>
+        <element-form v-else :id="elementId" :type="elementType" />
       </el-collapse-item>
       <el-collapse-item name="task" v-if="elementType.indexOf('Task') !== -1" key="task">
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-claim"></i>任务</div>
