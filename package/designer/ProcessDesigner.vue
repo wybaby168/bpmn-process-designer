@@ -247,9 +247,10 @@ export default {
     this.initBpmnModeler();
     this.createNewDiagram(this.value);
     this.$once("hook:beforeDestroy", () => {
-      if (this.bpmnModeler) this.bpmnModeler.destroy();
-      this.$emit("destroy", this.bpmnModeler);
+      const modeler = this.bpmnModeler;
       this.bpmnModeler = null;
+      modeler?.destroy?.();
+      this.$emit("destroy", modeler);
     });
   },
   methods: {
@@ -301,6 +302,7 @@ export default {
     },
     /* 创建新的流程图 */
     async createNewDiagram(xml) {
+      if (!this.bpmnModeler) return;
       // 将字符串转换成图显示出来
       let newId = this.processId || `Process_${new Date().getTime()}`;
       let newName = this.processName || `业务流程_${new Date().getTime()}`;
@@ -313,7 +315,10 @@ export default {
       } catch (e) {
         console.error(`[Process Designer Warn]: ${e?.message || e}`);
       } finally {
-        this.$nextTick(() => this.processReZoom());
+        this.$nextTick(() => {
+          if (this._isDestroyed || this._isBeingDestroyed || !this.bpmnModeler) return;
+          this.processReZoom();
+        });
       }
     },
 
@@ -441,6 +446,8 @@ export default {
     processReZoom() {
       if (!this.bpmnModeler) return;
       const canvas = this.bpmnModeler.get("canvas");
+      const canvasContainer = canvas?.getContainer?.();
+      if (!canvasContainer) return;
       canvas?.resized?.();
 
       const elementRegistry = this.bpmnModeler.get("elementRegistry");
