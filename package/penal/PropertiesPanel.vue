@@ -16,7 +16,11 @@
       <el-collapse-item name="condition" v-if="formVisible" key="form">
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-order"></i>表单</div>
         <template v-if="$scopedSlots.form || $slots.form">
-          <slot name="form" v-bind="{ id: elementId, elementId, type: elementType, businessObject: elementBusinessObject, element: bpmnElement }" />
+          <element-business-form-config :id="elementId">
+            <template v-slot:form="data">
+              <slot name="form" v-bind="data" />
+            </template>
+          </element-business-form-config>
         </template>
         <element-form v-else :id="elementId" :type="elementType" />
       </el-collapse-item>
@@ -66,6 +70,7 @@ import SignalAndMassage from "./signal-message/SignalAndMessage";
 import ElementListeners from "./listeners/ElementListeners";
 import ElementProperties from "./properties/ElementProperties";
 import ElementForm from "./form/ElementForm";
+import ElementBusinessFormConfig from "./form/ElementBusinessFormConfig";
 import UserTaskListeners from "./listeners/UserTaskListeners";
 import Log from "../Log";
 import mock from "./mock";
@@ -80,6 +85,7 @@ export default {
   components: {
     UserTaskListeners,
     ElementForm,
+    ElementBusinessFormConfig,
     ElementProperties,
     ElementListeners,
     SignalAndMassage,
@@ -138,6 +144,11 @@ export default {
   created() {
     this.initModels();
   },
+  beforeDestroy() {
+    // initModels 在 modeler 未就绪时会 setTimeout 轮询；组件销毁时需要清理定时器与全局引用
+    if (this.timer) clearTimeout(this.timer);
+    window.bpmnInstances = null;
+  },
   methods: {
     initModels() {
       // 初始化 modeler 以及其他 moddle
@@ -147,6 +158,8 @@ export default {
         return;
       }
       if (this.timer) clearTimeout(this.timer);
+
+      // 全局注入 bpmn-js 关键服务，供各子面板组件共享（历史设计，保持兼容）
       window.bpmnInstances = {
         modeler: this.bpmnModeler,
         modeling: this.bpmnModeler.get("modeling"),
@@ -192,6 +205,9 @@ export default {
       this.bpmnElement = activatedElement;
       this.elementId = activatedElement.id;
       this.elementType = activatedElement.type.split(":")[1] || "";
+
+      // 注意：这里存的是 businessObject 的“镜像副本”，用于展示/判断，避免 UI 侧误改 moddle 对象
+      // 真正写回时，必须使用 this.bpmnElement（bpmn-js element）+ modeling 服务
       this.elementBusinessObject = JSON.parse(JSON.stringify(activatedElement.businessObject));
       this.conditionFormVisible = !!(
         this.elementType === "SequenceFlow" &&
@@ -200,9 +216,7 @@ export default {
       );
       this.formVisible = this.elementType === "UserTask" || this.elementType === "StartEvent";
     },
-    beforeDestroy() {
-      window.bpmnInstances = null;
-    }
+    
   }
 };
 </script>

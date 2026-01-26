@@ -246,12 +246,18 @@ export default {
   mounted() {
     this.initBpmnModeler();
     this.createNewDiagram(this.value);
-    this.$once("hook:beforeDestroy", () => {
-      const modeler = this.bpmnModeler;
-      this.bpmnModeler = null;
-      modeler?.destroy?.();
-      this.$emit("destroy", modeler);
-    });
+  },
+  beforeDestroy() {
+    const modeler = this.bpmnModeler;
+    this.bpmnModeler = null;
+    const canvas = modeler?.get?.("canvas");
+    const viewboxChanged = canvas?._viewboxChanged;
+    viewboxChanged?.cancel?.();
+    if (canvas && canvas._viewboxChanged) {
+      canvas._viewboxChanged = () => {};
+    }
+    modeler?.destroy?.();
+    this.$emit("destroy", modeler);
   },
   methods: {
     initBpmnModeler() {
@@ -458,7 +464,7 @@ export default {
         canvas.zoom("fit-viewport", "auto");
         return;
       }
-
+      if (!canvas) return;
       canvas.zoom(1);
       const viewbox = canvas.viewbox();
       canvas.viewbox({

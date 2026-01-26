@@ -51,3 +51,22 @@
 </my-properties-panel>
 ```
 
+## 4. 自定义 form 渲染时同时写回 formKey + 业务扩展
+
+推荐你的自定义 `form` slot 直接使用属性面板注入的写回方法：
+
+- `setFormKey(formKey)`：写回表单标识
+- `values + emit(name, value)`：写回业务扩展键值（契约与 `element-business-config` 一致）
+
+示例（仅展示核心用法）：
+
+```vue
+<wf-modeler v-model="xml">
+  <template #form="{ id, formKey, setFormKey, values, emit }">
+    <el-input :value="formKey" @input="setFormKey" />
+    <el-input :value="values && values.comment" @input="v => emit('comment', v)" />
+  </template>
+</wf-modeler>
+```
+
+如果你需要在 `wf-vue` 的封装层补齐这些能力，可直接应用补丁：`docs/codes/wf-vue-WorkflowModeler-Modeler-form-slot-formKey-business.patch`。

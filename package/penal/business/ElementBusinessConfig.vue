@@ -1,11 +1,26 @@
 <template>
   <div class="panel-tab__content">
+    <!--
+      对外契约（供自定义业务面板使用）：
+
+      - values: Record<string, string>
+        当前选中元素的业务扩展键值对视图（从 extensionElements 的 BusinessVariables 聚合而来）
+
+      - emit(name, value)
+        写回业务扩展键值：
+          - key 已存在：只更新对应 `${prefix}:Property` 的 value
+          - key 不存在：创建新的 `${prefix}:Property`，并写回 extensionElements（保留其它扩展元素）
+
+      这样调用方只需要关心“键值读写”，无需直接操作 window.bpmnInstances / moddle 细节。
+    -->
     <slot name="business" :values="values" :emit="handleChange" :id="id"></slot>
   </div>
 </template>
 <script>
+import { readBusinessVariables, writeBusinessVariable } from "../utils/businessVariables";
+
 export default {
-  name: "ElementOtherConfig",
+  name: "ElementBusinessConfig",
   props: {
     id: String
   },
@@ -22,6 +37,7 @@ export default {
     id: {
       immediate: true,
       handler: function(id) {
+        // id 变化代表“当前选中元素”变化：重新从 BPMN 模型中读取业务扩展值，刷新 UI
         if (id?.length) {
           this.resetValues();
         }
@@ -35,61 +51,37 @@ export default {
   },
   methods: {
     resetValues() {
+      // bpmnElement 是 bpmn-js 的 element（包含 businessObject 等），从属性面板全局注入读取
       this.bpmnElement = window.bpmnInstances.bpmnElement;
-      // 其他扩展配置（兼容）
-      this.otherExtensionList = [];
-      // 找到业务属性的所有集合
-      const properties =
-        this.bpmnElement.businessObject?.extensionElements?.values?.filter(ex => {
-          if (ex.$type !== this.tag) {
-            this.otherExtensionList.push(ex);
-          }
-          return ex.$type === this.tag;
-        }) || [];
-      // 保存所有的业务属性字段
-      this.elements = properties.reduce((pre, current) => pre.concat(current.values), []);
-      // 设置值
-      this.applyValues();
-    },
-    applyValues() {
-      const indexes = {};
-      this.values = this.elements.reduce((obj, elem, index) => {
-        obj[elem.name] = elem.value;
-        indexes[elem.name] = index;
-        return obj;
-      }, {});
-      this.indexes = indexes;
+
+      // 读取 BusinessVariables（同时保留其它扩展元素列表，供写回时使用）
+      const state = readBusinessVariables({ bpmnElement: this.bpmnElement, prefix: this.prefix });
+      this.elements = state.elements;
+      this.otherExtensionList = state.otherExtensionList;
+      this.indexes = state.indexes;
+      this.values = state.values;
     },
     // 核心，改变值的方法，会触发xml节点更新
     handleChange(name, value) {
-      // 已经存在的key，直接更新节点
-      if (name in this.indexes) {
-        const index = this.indexes[name];
-        window.bpmnInstances.modeling.updateModdleProperties(this.bpmnElement, this.elements[index], {
-          name,
-          value
-        });
-      } else {
-        // 生成属性列表
-        const elements = [...this.elements];
-        // 不存在，新增key
-        const newPropertyObject = window.bpmnInstances.moddle.create(`${this.prefix}:Property`, { name, value });
-        elements.push(newPropertyObject);
-        // 新建一个属性字段的保存列表
-        const propertiesObject = window.bpmnInstances.moddle.create(this.tag, {
-          values: elements
-        });
-        this.updateElementExtensions(propertiesObject);
-      }
-      this.resetValues();
-    },
-    updateElementExtensions(properties) {
-      const extensions = window.bpmnInstances.moddle.create("bpmn:ExtensionElements", {
-        values: this.otherExtensionList.concat([properties])
+      const { modeling, moddle } = window.bpmnInstances;
+
+      // 读一次 state 并传入写方法，避免写方法内部再次扫描 extensionElements
+      const state = readBusinessVariables({ bpmnElement: this.bpmnElement, prefix: this.prefix });
+      const nextState = writeBusinessVariable({
+        bpmnElement: this.bpmnElement,
+        prefix: this.prefix,
+        name,
+        value,
+        modeling,
+        moddle,
+        state
       });
-      window.bpmnInstances.modeling.updateProperties(this.bpmnElement, {
-        extensionElements: extensions
-      });
+
+      // 写回后同步本组件缓存，保证 slot 侧 values 实时更新
+      this.elements = nextState.elements;
+      this.otherExtensionList = nextState.otherExtensionList;
+      this.indexes = nextState.indexes;
+      this.values = nextState.values;
     }
   },
   beforeDestroy() {
