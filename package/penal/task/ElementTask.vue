@@ -15,10 +15,20 @@
 import UserTask from "./task-components/UserTask";
 import ScriptTask from "./task-components/ScriptTask";
 import ReceiveTask from "./task-components/ReceiveTask";
+import ServiceTask from "./task-components/ServiceTask";
 
+/**
+ * 任务面板：按 BPMN 元素类型选择对应的子面板组件。
+ *
+ * 复用说明：
+ * - Flowable 的 `bpmn:SendTask` / `bpmn:ServiceTask` / `bpmn:BusinessRuleTask` 在引擎扩展属性层面共享
+ *   `flowable:ServiceTaskLike`（见 `package/designer/plugins/descriptor/flowableDescriptor.json` 的 `ServiceTaskLike` 定义）。
+ * - 因此这三类任务在属性面板可共用同一套“实现方式（class/delegateExpression/expression/resultVariable）”配置组件，
+ *   以减少重复实现与维护成本。
+ */
 export default {
   name: "ElementTaskConfig",
-  components: { UserTask, ScriptTask, ReceiveTask },
+  components: { UserTask, ScriptTask, ReceiveTask, ServiceTask },
   props: {
     id: String,
     type: String
@@ -37,7 +47,10 @@ export default {
         // 发送任务、服务任务、业务规则任务共用一个相同配置
         UserTask: "UserTask", // 用户任务配置
         ScriptTask: "ScriptTask", // 脚本任务配置
-        ReceiveTask: "ReceiveTask" // 消息接收任务
+        ReceiveTask: "ReceiveTask", // 消息接收任务
+        ServiceTask: "ServiceTask", // 服务任务配置
+        SendTask: "ServiceTask", // 发送任务
+        BusinessRuleTask: "ServiceTask" // 业务规则任务
       }
     };
   },
