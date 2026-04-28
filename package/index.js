@@ -10,7 +10,7 @@ import Log from "../package/Log";
 
 const components = [MyProcessDesigner, MyProcessPenal, ProcessViewer];
 
-const install = function(Vue) {
+const install = function (Vue) {
   components.forEach(component => {
     Vue.component(component.name, component);
   });
@@ -21,7 +21,7 @@ if (typeof window !== "undefined" && window.Vue) {
 }
 
 export default {
-  version: "1.3.13",
+  version: "1.3.15",
   install,
   ...components
 };

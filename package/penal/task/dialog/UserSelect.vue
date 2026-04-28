@@ -10,8 +10,8 @@
           </div>
           <div class="head-container">
             <el-input
-              :value="departName"
-              :input="filter"
+              v-model="departName"
+              @input="filter"
               placeholder="请输入部门名称"
               clearable
               size="small"
@@ -33,9 +33,19 @@
         </el-card>
       </el-col>
       <el-col :span="17">
+        <el-input
+          v-model.trim="userName"
+          placeholder="请输入用户名"
+          clearable
+          size="small"
+          prefix-icon="el-icon-search"
+          style="width: 240px; margin-bottom: 12px"
+          @input="searchUsers"
+          @keyup.enter.native="loadData(true)"
+        />
         <el-table
           ref="multipleTable"
-          height="450"
+          height="405"
           v-loading="loading"
           size="small"
           :data="users"
@@ -49,8 +59,7 @@
           <el-table-column label="部门" align="center" prop="depart.name" />
           <el-table-column label="角色" align="center" prop="role.name" />
         </el-table>
-        <pagination :total="pagination.total" :page.sync="pagination.page" :limit.sync="pagination.size"
-                    @pagination="loadData(true)" />
+        <pagination :total="pagination.total" :page.sync="pagination.page" :limit.sync="pagination.size" @pagination="loadData(true)" />
       </el-col>
     </el-row>
     <div slot="footer" class="dialog-footer">
@@ -82,15 +91,17 @@ export default {
       pagination: EMPTY_PAGE(),
       departName: "",
       departId: "",
-      selected: []
+      userName: "",
+      selected: [],
+      userSearchTimer: null
     };
   },
   inject: ["provider"],
   methods: {
     async select(multiple, selected = []) {
+      this.reset();
       this.multiple = multiple;
       this.selected = selected;
-      this.reset();
       this.visible = true;
       await this.loadData();
       return new Promise((resolve, reject) => {
@@ -102,6 +113,13 @@ export default {
     filter(value) {
       this.$refs.tree.filter(value);
     },
+    searchUsers() {
+      clearTimeout(this.userSearchTimer);
+      this.userSearchTimer = setTimeout(() => {
+        this.pagination.page = 1;
+        this.loadData(true);
+      }, 300);
+    },
     // 筛选节点
     filterNode(value, data) {
       if (!value) return true;
@@ -109,6 +127,7 @@ export default {
     },
     handleNodeClick(data) {
       this.departId = data.id;
+      this.pagination.page = 1;
       this.loadData(true);
     },
     handleSelection(selection) {
@@ -134,7 +153,17 @@ export default {
           this.departs = await departs({ name: this.departName });
         }
         const { page, size } = this.pagination;
-        const { list = [], ...pagination } = await users({ depart: this.departId, page, size });
+        const start = (page - 1) * size;
+        const firstNameLike = this.userName ? `%${this.userName}%` : undefined;
+        const { list = [], ...pagination } = await users({
+          depart: this.departId,
+          memberOfGroup: this.departId,
+          name: this.userName,
+          firstNameLike,
+          page,
+          start,
+          size
+        });
         this.pagination = pagination;
         this.users = list;
       } finally {
@@ -142,8 +171,10 @@ export default {
       }
     },
     reset() {
+      clearTimeout(this.userSearchTimer);
       this.departName = "";
       this.departId = "";
+      this.userName = "";
       this.departs = [];
       this.users = [];
       this.pagination = EMPTY_PAGE();
@@ -155,6 +186,9 @@ export default {
       delete this.resolve;
       delete this.reject;
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.userSearchTimer);
   }
 };
 </script>

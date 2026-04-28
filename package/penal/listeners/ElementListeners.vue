@@ -46,7 +46,16 @@
           key="listener-expression"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-input v-model="listenerForm.expression" clearable />
+          <slot
+            v-if="$scopedSlots['execution-listener-expression'] || $slots['execution-listener-expression']"
+            name="execution-listener-expression"
+            :value="listenerForm.expression"
+            :form="listenerForm"
+            :listenerForm="listenerForm"
+            :emit="setListenerExpression"
+            :setValue="setListenerExpression"
+          />
+          <el-input v-else v-model="listenerForm.expression" clearable />
         </el-form-item>
         <el-form-item
           v-if="listenerForm.listenerType === 'delegateExpressionListener'"
@@ -293,6 +302,9 @@ export default {
       // 4. 隐藏侧边栏
       this.listenerFormModelVisible = false;
       this.listenerForm = {};
+    },
+    setListenerExpression(value) {
+      this.$set(this.listenerForm, "expression", value ?? "");
     }
   }
 };

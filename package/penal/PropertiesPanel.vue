@@ -42,7 +42,11 @@
       </el-collapse-item>
       <el-collapse-item name="listeners" key="listeners">
         <div slot="title" class="panel-tab__title"><i class="el-icon-message-solid"></i>执行监听器</div>
-        <element-listeners :id="elementId" :type="elementType" />
+        <element-listeners :id="elementId" :type="elementType">
+          <template v-if="$scopedSlots['execution-listener-expression'] || $slots['execution-listener-expression']" v-slot:execution-listener-expression="data">
+            <slot name="execution-listener-expression" v-bind="data" />
+          </template>
+        </element-listeners>
       </el-collapse-item>
       <el-collapse-item name="taskListeners" v-if="elementType === 'UserTask'" key="taskListeners">
         <div slot="title" class="panel-tab__title"><i class="el-icon-message-solid"></i>任务监听器</div>
@@ -121,7 +125,7 @@ export default {
     return {
       prefix: this.prefix,
       width: this.width,
-      provider: this.provider,
+      provider: this.provider
     };
   },
   data() {
@@ -215,8 +219,7 @@ export default {
         activatedElement.source.type.indexOf("StartEvent") === -1
       );
       this.formVisible = this.elementType === "UserTask" || this.elementType === "StartEvent";
-    },
-    
+    }
   }
 };
 </script>
