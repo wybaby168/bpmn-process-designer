@@ -21,7 +21,7 @@ if (typeof window !== "undefined" && window.Vue) {
 }
 
 export default {
-  version: "1.3.15",
+  version: "1.3.16",
   install,
   ...components
 };

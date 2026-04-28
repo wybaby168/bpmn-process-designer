@@ -59,7 +59,14 @@
           <el-table-column label="部门" align="center" prop="depart.name" />
           <el-table-column label="角色" align="center" prop="role.name" />
         </el-table>
-        <pagination :total="pagination.total" :page.sync="pagination.page" :limit.sync="pagination.size" @pagination="loadData(true)" />
+        <pagination
+          :total="pagination.total"
+          :page.sync="pagination.page"
+          :limit.sync="pagination.size"
+          :pager-count="5"
+          style="padding: 16px 0 0; overflow-x: auto"
+          @pagination="loadData(true)"
+        />
       </el-col>
     </el-row>
     <div slot="footer" class="dialog-footer">
